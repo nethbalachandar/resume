@@ -129,10 +129,10 @@ img{ max-width:100%; display:block; }
 .skill-category p{ margin:0; color:var(--muted); }
 .resume-download{ text-align:center; margin-top:8px; }
 
-/* Buttons */
+/* ===== Buttons ===== */
 .btn{
   display:inline-flex; align-items:center; gap:.5rem; padding:12px 20px; border:0; border-radius:8px;
-  font-weight:600; cursor:pointer; text-decoration:none; font-size:1rem; transition:transform .15s ease, box-shadow .2s ease;
+  font-weight:600; cursor:pointer; text-decoration:none; font-size:1rem; transition:transform .15s, box-shadow .2s;
 }
 .btn-primary{ color:#fff; background:linear-gradient(135deg, var(--brand-1), var(--brand-2)); }
 .btn-primary:hover{ transform:translateY(-2px); box-shadow:0 10px 30px rgba(102,126,234,.3); }
@@ -151,6 +151,7 @@ img{ max-width:100%; display:block; }
   background:linear-gradient(135deg, var(--brand-1), var(--brand-2)); color:#fff; padding:.2rem .6rem;
   border-radius:999px; font-size:.8rem; font-weight:600;
 }
+.project-cover{ width:100%; aspect-ratio: 4/2; object-fit:cover; border-radius:10px; margin:-8px 0 10px; }
 .project-description{ color:var(--muted); margin:0 0 12px; }
 .project-metrics{ display:flex; gap:16px; }
 .metric-value{ font-weight:800; color:var(--brand-1); }
@@ -161,6 +162,28 @@ img{ max-width:100%; display:block; }
   text-decoration:none; transition:all .2s ease;
 }
 .project-link:hover{ color:#fff; background:linear-gradient(135deg, var(--brand-1), var(--brand-2)); transform:translateY(-2px); }
+
+/* Filters + search */
+.proj-controls{
+  display:flex; gap:12px; align-items:center; justify-content:space-between;
+  margin:0 0 16px; flex-wrap:wrap;
+}
+.proj-search{
+  flex:1 1 260px; max-width:420px; padding:10px 12px; border-radius:10px; border:1px solid rgba(0,0,0,.1);
+  font-size:1rem; outline:none;
+}
+.proj-search:focus{ border-color:var(--brand-1); box-shadow:0 0 0 3px rgba(102,126,234,.15); }
+.proj-tags{ display:flex; gap:8px; flex-wrap:wrap; }
+.chip{
+  display:inline-flex; align-items:center; gap:6px; padding:.45rem .7rem; border-radius:999px;
+  border:1px solid rgba(0,0,0,.12); background:var(--panel); color:var(--ink-2); cursor:pointer;
+  font-weight:600; font-size:.9rem;
+}
+.chip:hover{ border-color:var(--brand-1); }
+.chip.active{
+  background:linear-gradient(135deg, var(--brand-1), var(--brand-2));
+  color:#fff; border-color:transparent;
+}
 
 /* ===== Learning ===== */
 .learning-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:24px; }
@@ -216,16 +239,27 @@ img{ max-width:100%; display:block; }
 }
 .lightbox::backdrop{ background:rgba(0,0,0,.6); }
 .lightbox img{ width:100%; height:auto; display:block; }
-.lightbox__caption{
-  color:#e5e7eb; margin:10px 16px 16px; font-size:.95rem;
-}
+.lightbox__caption{ color:#e5e7eb; margin:10px 16px 16px; font-size:.95rem; }
 .lightbox__close{
   position:absolute; right:12px; top:12px; border:0; background:rgba(255,255,255,.1); color:#fff;
   width:36px; height:36px; display:grid; place-items:center; border-radius:8px; cursor:pointer;
 }
 .lightbox__close:hover{ background:rgba(255,255,255,.2); }
 
-/* ===== Contact ===== */
+/* Project Modal */
+.project-modal{
+  border:none; padding:0; width:min(92vw, 900px); max-height:90vh; background:var(--panel);
+}
+.project-modal::backdrop{ background:rgba(0,0,0,.55); }
+.project-modal__body{ padding:20px; overflow:auto; }
+.project-modal__close{
+  position:absolute; right:12px; top:12px; border:0; background:rgba(0,0,0,.06); color:var(--ink-2);
+  width:36px; height:36px; display:grid; place-items:center; border-radius:8px; cursor:pointer;
+}
+.project-modal__close:hover{ background:rgba(0,0,0,.12); }
+.project-modal__content .gallery-grid{ margin-top:12px; }
+
+/* ===== Contact & Footer ===== */
 .contact-content{ max-width:720px; margin:0 auto; }
 .contact-info{ display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:16px; }
 .contact-item{
@@ -236,7 +270,6 @@ img{ max-width:100%; display:block; }
 .contact-item a, .contact-item span{ color:#cbd5e0; text-decoration:none; }
 .contact-item a:hover{ color:#fff; }
 
-/* ===== Footer ===== */
 .footer{ background:#1a202c; color:#cbd5e0; text-align:center; padding:24px 0; }
 
 /* ===== Animations ===== */
