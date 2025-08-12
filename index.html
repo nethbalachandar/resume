@@ -5,12 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <title>Nethra Balachandar — Materials Engineer</title>
-  <meta name="description" content="Materials Engineer focused on semiconductor process optimization, defect detection, and battery degradation analysis. MS MSE @ Purdue." />
-
-  <!-- Open Graph -->
-  <meta property="og:title" content="Nethra Balachandar — Materials Engineer" />
-  <meta property="og:description" content="Semiconductor process optimization • Materials characterization • Yield improvement" />
-  <meta property="og:type" content="website" />
+  <meta name="description" content="Materials Engineer focused on semiconductor process optimization, materials characterization, and yield improvement. MS MSE @ Purdue." />
 
   <!-- Fonts / Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -52,7 +47,6 @@
   <section id="about" class="hero section">
     <div class="container hero__grid">
       <div class="hero__media" data-animate="rise">
-        <!-- Put your photo here: /assets/profile.jpg -->
         <img src="assets/profile.jpg" alt="Portrait of Nethra Balachandar" class="hero__photo" loading="lazy" />
       </div>
 
@@ -175,7 +169,6 @@
         </div>
 
         <div class="resume-download">
-          <!-- Replace with your actual file -->
           <a href="assets/Nethra-Balachandar-Resume.pdf" class="btn btn-primary" download>
             <i class="fas fa-download" aria-hidden="true"></i> Download Full Resume (PDF)
           </a>
@@ -184,76 +177,111 @@
     </div>
   </section>
 
-  <!-- Projects -->
+  <!-- Projects (static HTML you can paste new cards into) -->
   <section id="projects" class="section bg-light">
     <div class="container">
       <h2 class="section-title">Key Projects</h2>
 
-      <div class="projects-grid">
-        <article class="project-card" data-animate="rise">
+      <!-- Filters + search (auto-wired by JS) -->
+      <div class="proj-controls" data-animate="rise">
+        <input type="search" id="proj-search" class="proj-search" placeholder="Search projects, tags…" aria-label="Search projects" />
+        <div id="proj-tags" class="proj-tags" role="tablist" aria-label="Filter by tag"></div>
+      </div>
+
+      <!-- >>> Add/duplicate <article class="project-card"> blocks below <<< -->
+      <div id="projects-root" class="projects-grid" data-animate="rise">
+
+        <!-- Example Project 1 -->
+        <article class="project-card" id="proj-yield"
+                 data-tags="Python, JMP, DOE, XGBoost, Semiconductor">
           <div class="project-header">
             <h3>Yield Optimization in Semiconductor Manufacturing</h3>
-            <div class="project-tags">
-              <span class="tag">Python</span><span class="tag">JMP</span><span class="tag">DOE</span><span class="tag">XGBoost</span>
-            </div>
+            <div class="project-tags"><!-- filled by JS from data-tags --></div>
           </div>
+          <img class="project-cover" src="assets/projects/yield/cover.jpg" alt="SECOM sensor DOE/XGBoost workflow" loading="lazy">
           <p class="project-description">
-            Applied DOE and XGBoost modeling on SECOM sensor data to identify critical variables,
-            improving yield classification accuracy and enabling data-driven process control.
+            DOE + XGBoost on SECOM sensor data to identify critical variables and enable data-driven process control.
           </p>
           <div class="project-metrics">
-            <div class="metric">
-              <span class="metric-value">93%</span>
-              <span class="metric-label">Accuracy</span>
-            </div>
+            <div class="metric"><span class="metric-value">93%</span><span class="metric-label">Accuracy</span></div>
           </div>
           <div class="project-actions">
-            <a href="yield-optimization.html" class="project-link">
+            <button class="project-link project-open" data-target="proj-yield">
               <i class="fas fa-arrow-right" aria-hidden="true"></i> View Details
-            </a>
+            </button>
+          </div>
+
+          <!-- Hidden rich details (you can add any HTML here) -->
+          <div class="project-details" hidden>
+            <h4>What I built</h4>
+            <ul>
+              <li>Ranked 590 sensors via mutual information + model importances.</li>
+              <li>Calibrated class weights and thresholds; surfaced SPC-ready rules.</li>
+              <li>Shipped explainable plots for line engineers.</li>
+            </ul>
+            <div class="gallery-grid" style="margin-top:12px">
+              <figure class="gallery-item">
+                <img src="assets/projects/yield/cover.jpg" alt="Feature ranking chart" loading="lazy" data-full="assets/projects/yield/cover.jpg">
+                <figcaption>Feature ranking</figcaption>
+              </figure>
+            </div>
           </div>
         </article>
 
-        <article class="project-card" data-animate="rise">
+        <!-- Example Project 2 -->
+        <article class="project-card" id="proj-wafer"
+                 data-tags="CNN, Deep Learning, Computer Vision, Semiconductor">
           <div class="project-header">
             <h3>Automated Wafer Defect Detection</h3>
-            <div class="project-tags">
-              <span class="tag">CNN</span><span class="tag">Deep Learning</span><span class="tag">Vision</span>
-            </div>
+            <div class="project-tags"></div>
           </div>
+          <img class="project-cover" src="assets/projects/wafer/cover.jpg" alt="Wafer defect classification" loading="lazy">
           <p class="project-description">
-            Built a custom CNN for wafer defect classification, achieving 90% validation accuracy and reducing manual inspection effort.
+            Custom CNN for wafer maps to reduce manual inspection burden and speed up feedback loops.
           </p>
           <div class="project-metrics">
-            <div class="metric">
-              <span class="metric-value">90%</span>
-              <span class="metric-label">Val. Accuracy</span>
-            </div>
+            <div class="metric"><span class="metric-value">90%</span><span class="metric-label">Val. Accuracy</span></div>
           </div>
           <div class="project-actions">
-            <a href="wafer-defect.html" class="project-link">
+            <button class="project-link project-open" data-target="proj-wafer">
               <i class="fas fa-arrow-right" aria-hidden="true"></i> View Details
-            </a>
+            </button>
+          </div>
+
+          <div class="project-details" hidden>
+            <h4>Highlights</h4>
+            <ul>
+              <li>Orientation normalization + class-imbalance fixes.</li>
+              <li>Compact CNN with LR schedule & early stopping.</li>
+              <li>Error analysis to steer process fixes.</li>
+            </ul>
           </div>
         </article>
 
-        <article class="project-card" data-animate="rise">
+        <!-- Example Project 3 -->
+        <article class="project-card" id="proj-gnn"
+                 data-tags="GNN, Python GUI, Materials">
           <div class="project-header">
             <h3>GUI-Integrated GNN for Material Properties</h3>
-            <div class="project-tags">
-              <span class="tag">GNN</span><span class="tag">Python GUI</span><span class="tag">Materials</span>
-            </div>
+            <div class="project-tags"></div>
           </div>
+          <img class="project-cover" src="assets/projects/gnn/cover.jpg" alt="GNN GUI for crystal properties" loading="lazy">
           <p class="project-description">
-            Interactive GUI to visualize predictions and feature relevance of crystal property models using GNNs, improving accessibility and explainability.
+            Interactive GUI to visualize predictions and feature relevance of crystal property models.
           </p>
           <div class="project-actions">
-            <a href="gnn-materials.html" class="project-link">
+            <button class="project-link project-open" data-target="proj-gnn">
               <i class="fas fa-arrow-right" aria-hidden="true"></i> View Details
-            </a>
+            </button>
+          </div>
+
+          <div class="project-details" hidden>
+            <p>Wrapped a trained GNN with a lightweight desktop app; added saliency overlays and CSV/figure export.</p>
           </div>
         </article>
+
       </div>
+      <!-- ^^^ Add more project-card blocks above ^^^ -->
     </div>
   </section>
 
@@ -340,7 +368,6 @@
       <h2 class="section-title">Beyond the Lab</h2>
       <p class="section-subtitle">Things that keep me curious and creative outside core engineering work.</p>
 
-      <!-- Feature cards (reusing learning-card styling) -->
       <div class="learning-grid">
         <article class="learning-card beyond-card" data-animate="rise">
           <div class="beyond-icon"><i class="fas fa-pen-ruler" aria-hidden="true"></i></div>
@@ -370,34 +397,27 @@
       <!-- Compact Photo Gallery -->
       <div class="gallery">
         <h3 class="gallery-title">Inspiration Gallery</h3>
-
         <div class="gallery-grid">
-          <!-- Replace src with your images (kept same size ratio for best results) -->
           <figure class="gallery-item">
             <img src="assets/beyond/arch-1.jpg" alt="Geometric facade of a modern building" loading="lazy" data-full="assets/beyond/arch-1.jpg" />
             <figcaption>Geometric Facades</figcaption>
           </figure>
-
           <figure class="gallery-item">
             <img src="assets/beyond/arch-2.jpg" alt="Curved architectural forms with repeating arches" loading="lazy" data-full="assets/beyond/arch-2.jpg" />
             <figcaption>Curves & Repetition</figcaption>
           </figure>
-
           <figure class="gallery-item">
             <img src="assets/beyond/landscape-1.jpg" alt="Mountain landscape at golden hour" loading="lazy" data-full="assets/beyond/landscape-1.jpg" />
             <figcaption>Golden Hour</figcaption>
           </figure>
-
           <figure class="gallery-item">
             <img src="assets/beyond/landscape-2.jpg" alt="Minimal sand dunes with long shadows" loading="lazy" data-full="assets/beyond/landscape-2.jpg" />
             <figcaption>Minimal Dunes</figcaption>
           </figure>
-
           <figure class="gallery-item">
             <img src="assets/beyond/pattern-1.jpg" alt="Abstract tiled pattern with symmetry" loading="lazy" data-full="assets/beyond/pattern-1.jpg" />
             <figcaption>Symmetry</figcaption>
           </figure>
-
           <figure class="gallery-item">
             <img src="assets/beyond/pattern-2.jpg" alt="Repeating hexagonal textures" loading="lazy" data-full="assets/beyond/pattern-2.jpg" />
             <figcaption>Textures</figcaption>
@@ -453,10 +473,20 @@
     </div>
   </footer>
 
+  <!-- Lightbox for gallery images -->
   <dialog class="lightbox" aria-label="Image preview">
     <button class="lightbox__close" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
     <img src="" alt="" />
     <p class="lightbox__caption"></p>
+  </dialog>
+
+  <!-- Project details modal (auto-filled from each card's .project-details) -->
+  <dialog class="project-modal" aria-labelledby="project-modal-title">
+    <button class="project-modal__close" aria-label="Close"><i class="fas fa-times"></i></button>
+    <div class="project-modal__body">
+      <h3 id="project-modal-title"></h3>
+      <div class="project-modal__content"></div>
+    </div>
   </dialog>
 
   <script src="script.js" defer></script>
