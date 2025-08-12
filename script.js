@@ -1,24 +1,18 @@
-// ===== Utilities =====
+// ===== Helpers =====
 const $ = (sel, root = document) => root.querySelector(sel);
 const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
 
-// ===== Mobile nav toggle =====
+// ===== Mobile nav =====
 const toggleBtn = $('.mobile-menu-toggle');
 const navLinksWrap = $('#site-nav');
-
 if (toggleBtn && navLinksWrap) {
   toggleBtn.addEventListener('click', () => {
     const expanded = toggleBtn.getAttribute('aria-expanded') === 'true';
     toggleBtn.setAttribute('aria-expanded', String(!expanded));
     navLinksWrap.classList.toggle('active');
     const icon = toggleBtn.querySelector('i');
-    if (icon) {
-      icon.classList.toggle('fa-bars', expanded);
-      icon.classList.toggle('fa-times', !expanded);
-    }
+    if (icon) { icon.classList.toggle('fa-bars', expanded); icon.classList.toggle('fa-times', !expanded); }
   });
-
-  // Close on link click (mobile)
   $$('.nav-link', navLinksWrap).forEach(link => {
     link.addEventListener('click', () => {
       navLinksWrap.classList.remove('active');
@@ -27,8 +21,6 @@ if (toggleBtn && navLinksWrap) {
       if (icon) { icon.classList.add('fa-bars'); icon.classList.remove('fa-times'); }
     });
   });
-
-  // Click outside to close
   document.addEventListener('click', (e) => {
     if (!navLinksWrap.contains(e.target) && !toggleBtn.contains(e.target)) {
       navLinksWrap.classList.remove('active');
@@ -39,7 +31,7 @@ if (toggleBtn && navLinksWrap) {
   });
 }
 
-// ===== Smooth scroll with header offset =====
+// ===== Smooth scroll =====
 $$('a[href^="#"]').forEach(a => {
   a.addEventListener('click', (e) => {
     const id = a.getAttribute('href');
@@ -55,10 +47,9 @@ $$('a[href^="#"]').forEach(a => {
   });
 });
 
-// ===== Active nav link via IntersectionObserver =====
+// ===== Active link on scroll =====
 const sections = $$('section[id]');
 const navLinks = $$('.nav-link');
-
 if ('IntersectionObserver' in window) {
   const obs = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -68,18 +59,14 @@ if ('IntersectionObserver' in window) {
       }
     });
   }, { rootMargin: '-40% 0px -55% 0px', threshold: 0.01 });
-
   sections.forEach(sec => obs.observe(sec));
 }
 
-// ===== Header blur intensity on scroll (subtle) =====
+// ===== Header subtle background change =====
 window.addEventListener('scroll', () => {
   const header = $('.header');
   if (!header) return;
-  const y = window.scrollY;
-  header.style.background = y > 80
-    ? 'rgba(255,255,255,0.92)'
-    : 'rgba(255,255,255,0.85)';
+  header.style.background = window.scrollY > 80 ? 'rgba(255,255,255,0.92)' : 'rgba(255,255,255,0.85)';
 });
 
 // ===== Reveal animations =====
@@ -114,16 +101,13 @@ const statNumbers = $$('.stat-number');
 if (statNumbers.length) {
   const so = new IntersectionObserver((entries) => {
     entries.forEach(e => {
-      if (e.isIntersecting) {
-        animateStat(e.target);
-        so.unobserve(e.target);
-      }
+      if (e.isIntersecting) { animateStat(e.target); so.unobserve(e.target); }
     });
   }, { threshold: 0.6 });
   statNumbers.forEach(s => so.observe(s));
 }
 
-// ===== Newsletter fake submission =====
+// ===== Newsletter fake submit =====
 const form = $('.newsletter-form');
 const statusP = $('.form-status');
 if (form) {
@@ -153,32 +137,129 @@ if (form) {
 const yearEl = $('#year');
 if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-// ===== Lightbox for gallery =====
-const dialog = $('.lightbox');
-const dialogImg = dialog?.querySelector('img');
-const dialogCap = dialog?.querySelector('.lightbox__caption');
-const dialogClose = dialog?.querySelector('.lightbox__close');
+// ===== Lightbox for gallery images =====
+const lightbox = $('.lightbox');
+const lbImg = lightbox?.querySelector('img');
+const lbCap = lightbox?.querySelector('.lightbox__caption');
+const lbClose = lightbox?.querySelector('.lightbox__close');
 
 $$('.gallery-item img').forEach(img => {
   img.addEventListener('click', () => {
-    if (!dialog) return;
+    if (!lightbox) return;
     const full = img.getAttribute('data-full') || img.src;
     const cap = img.closest('figure')?.querySelector('figcaption')?.textContent || '';
-    dialogImg.src = full;
-    dialogImg.alt = img.alt || '';
-    dialogCap.textContent = cap;
-    dialog.showModal();
+    lbImg.src = full;
+    lbImg.alt = img.alt || '';
+    lbCap.textContent = cap;
+    lightbox.showModal();
   });
 });
+lbClose?.addEventListener('click', () => lightbox?.close());
+lightbox?.addEventListener('click', (e) => {
+  const rect = lbImg.getBoundingClientRect();
+  const within = e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom;
+  if (!within) lightbox.close();
+});
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && lightbox?.open) lightbox.close(); });
 
-dialogClose?.addEventListener('click', () => dialog?.close());
-dialog?.addEventListener('click', (e) => {
-  // click outside image closes
-  const rect = dialogImg.getBoundingClientRect();
-  const withinImage = e.clientX >= rect.left && e.clientX <= rect.right &&
-                      e.clientY >= rect.top && e.clientY <= rect.bottom;
-  if (!withinImage) dialog.close();
-});
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape' && dialog?.open) dialog.close();
-});
+// ===== Projects: auto tags + filter + details modal =====
+(function projectsInit(){
+  const root = $('#projects-root');
+  const cards = $$('.project-card', root);
+  const tagBar = $('#proj-tags');
+  const searchEl = $('#proj-search');
+  if (!root || !cards.length) return;
+
+  // Build tag chips from data-tags on each card
+  const set = new Set();
+  cards.forEach(c => (c.dataset.tags || '').split(',').map(t => t.trim()).filter(Boolean).forEach(t => set.add(t)));
+  const allTags = ['All', ...[...set].sort((a,b)=>a.localeCompare(b))];
+
+  let activeTag = 'All';
+  let query = '';
+
+  function renderChips(){
+    if (!tagBar) return;
+    tagBar.innerHTML = allTags.map(t => `
+      <button role="tab" aria-selected="${t===activeTag}" class="chip ${t===activeTag?'active':''}" data-tag="${t}">${t}</button>
+    `).join('');
+    $$('.chip', tagBar).forEach(btn => {
+      btn.addEventListener('click', () => {
+        activeTag = btn.dataset.tag;
+        renderChips();
+        applyFilters();
+      });
+    });
+  }
+
+  // Fill visible tag badges on each card from its data-tags
+  cards.forEach(c => {
+    const holder = $('.project-tags', c);
+    if (!holder) return;
+    const tags = (c.dataset.tags || '').split(',').map(t => t.trim()).filter(Boolean);
+    holder.innerHTML = tags.map(t => `<span class="tag">${t}</span>`).join('');
+  });
+
+  function matches(card){
+    const tags = (card.dataset.tags || '').split(',').map(t => t.trim());
+    const text = card.textContent.toLowerCase() + ' ' + tags.join(' ').toLowerCase();
+    const tagOK = (activeTag === 'All') || tags.includes(activeTag);
+    const qOK = !query || text.includes(query.toLowerCase());
+    return tagOK && qOK;
+  }
+
+  function applyFilters(){
+    let visible = 0;
+    cards.forEach(card => {
+      const show = matches(card);
+      card.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+    if (!visible) {
+      root.insertAdjacentHTML('beforeend', `<p class="section-subtitle" id="no-match">No projects match your filters.</p>`);
+    } else {
+      $('#no-match')?.remove();
+    }
+  }
+
+  searchEl?.addEventListener('input', (e) => { query = e.target.value; applyFilters(); });
+  renderChips(); applyFilters();
+
+  // Project details modal: pulls HTML from .project-details
+  const dlg = $('.project-modal');
+  const dlgTitle = $('#project-modal-title');
+  const dlgBody = $('.project-modal__content');
+  const dlgClose = $('.project-modal__close');
+
+  function openModal(cardId){
+    const card = document.getElementById(cardId);
+    if (!card || !dlg) return;
+    const title = card.querySelector('.project-header h3')?.textContent || 'Project';
+    const details = card.querySelector('.project-details');
+    dlgTitle.textContent = title;
+    dlgBody.innerHTML = details ? details.innerHTML : '<p>No additional details yet.</p>';
+    dlg.showModal();
+
+    // Lightbox inside modal (for any gallery images within details)
+    $$('.gallery-item img', dlg).forEach(img => {
+      img.addEventListener('click', () => {
+        const full = img.getAttribute('data-full') || img.src;
+        const cap = img.closest('figure')?.querySelector('figcaption')?.textContent || '';
+        lbImg.src = full; lbImg.alt = img.alt || ''; lbCap.textContent = cap; lightbox.showModal();
+      }, { once:true });
+    });
+  }
+
+  $$('.project-open', root).forEach(btn => {
+    btn.addEventListener('click', () => openModal(btn.dataset.target));
+  });
+
+  dlgClose?.addEventListener('click', () => dlg?.close());
+  dlg?.addEventListener('click', (e) => {
+    const body = $('.project-modal__body', dlg);
+    if (body && !body.contains(e.target)) dlg.close();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && dlg?.open) dlg.close();
+  });
+})();
